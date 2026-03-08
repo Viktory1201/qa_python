@@ -31,6 +31,11 @@ class TestBooksCollector:
         assert "Ромео и Джульетта" in collector.books_genre
         assert collector.books_genre["Ромео и Джульетта"] == ''
 
+    def test_add_new_book_name_too_long_ignored(self, collector):
+        long_name = "a" * 41
+        collector.add_new_book(long_name)
+        assert long_name not in collector.books_genre
+
     def test_add_new_book_duplicate_ignored(self, collector):
         collector.add_new_book("Гамлет")
         collector.add_new_book("Гамлет")
@@ -77,6 +82,10 @@ class TestBooksCollector:
         collector.add_new_book("Любимая книга")
         collector.add_book_in_favorites("Любимая книга")
         assert "Любимая книга" in collector.get_list_of_favorites_books()
+
+    def test_add_book_in_favorites_not_add_book_in_collector_ignored(self, collector):
+        collector.add_book_in_favorites("Книга не из коллекции")
+        assert "Книга не из коллекции" not in collector.get_list_of_favorites_books()
 
     def test_add_book_in_favorites_duplicate_ignored(self, collector):
         collector.add_new_book("Повторяющаяся книга")
